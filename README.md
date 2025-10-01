@@ -109,7 +109,7 @@ A comprehensive real-time streaming comparison platform for multiple AI models w
    ANTHROPIC_API_KEY=your_anthropic_api_key_here
    XAI_API_KEY=your_xai_api_key_here
    JWT_SECRET=your-super-secret-jwt-key-here
-   CORS_ORIGIN=http://localhost:3000,http://localhost:3001
+   CORS_ORIGIN=http://localhost:3001
    ```
 
 4. **Start the backend**
@@ -146,7 +146,7 @@ A comprehensive real-time streaming comparison platform for multiple AI models w
    ```
 
 5. **Open your browser**
-   Navigate to `http://localhost:3000` (or the port shown in your terminal)
+   Navigate to `http://localhost:3001` (or the port shown in your terminal)
 
 ## 📁 Project Structure
 
@@ -261,12 +261,6 @@ multi-model-ai-playground/
 cd backend
 npm run test
 npm run test:e2e
-```
-
-### Frontend Tests
-```bash
-cd frontend
-npm run test
 ```
 
 ## 📊 Performance & Analytics

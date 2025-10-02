@@ -8,7 +8,7 @@ import { useAtom } from 'jotai';
 import { authAtom } from '@/stores/auth.store';
 import { authService } from '@/services/auth.service';
 import { useRouter } from 'next/navigation';
-import { Mail, User, Shield, LogOut, Settings, BarChart3, Zap } from 'lucide-react';
+import { Mail, User, Shield, LogOut, Settings, BarChart3, Zap, Globe } from 'lucide-react';
 import { useAnalytics } from '@/hooks/use-analytics';
 
 export function UserProfile() {
@@ -43,6 +43,25 @@ export function UserProfile() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* User Avatar and Basic Info */}
+          <div className="flex items-center space-x-4">
+            {authState.user.avatar ? (
+              <img 
+                src={authState.user.avatar} 
+                alt={authState.user.name}
+                className="w-16 h-16 rounded-full border-2 border-border"
+              />
+            ) : (
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <User className="h-8 w-8 text-primary" />
+              </div>
+            )}
+            <div>
+              <h3 className="text-lg font-semibold">{authState.user.name}</h3>
+              <p className="text-sm text-muted-foreground">{authState.user.email}</p>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-muted-foreground mb-2">Email Address</label>
@@ -52,15 +71,15 @@ export function UserProfile() {
               </div>
             </div>
             
-            {authState.user.name && (
-              <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-2">Display Name</label>
-                <div className="flex items-center space-x-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  <p className="text-sm text-foreground">{authState.user.name}</p>
-                </div>
+            <div>
+              <label className="block text-sm font-medium text-muted-foreground mb-2">Sign-in Provider</label>
+              <div className="flex items-center space-x-2">
+                <Globe className="h-4 w-4 text-muted-foreground" />
+                <Badge variant="outline" className="capitalize">
+                  {authState.user.provider}
+                </Badge>
               </div>
-            )}
+            </div>
           </div>
           
           <div>

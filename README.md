@@ -13,9 +13,9 @@ A comprehensive real-time streaming comparison platform for multiple AI models w
 - **Responsive Design**: Works perfectly on desktop and mobile devices
 
 ### Authentication & User Management
-- **Email-based Authentication**: Simple email + verification code login system
+- **Google OAuth**: Secure authentication with Google Sign-In
 - **JWT Token Management**: Secure authentication with automatic token refresh
-- **User Profiles**: Dedicated profile pages with account statistics
+- **User Profiles**: Dedicated profile pages with account statistics and avatar
 - **Session Persistence**: Stay logged in across page refreshes
 
 ### Chat History & Analytics
@@ -39,7 +39,7 @@ A comprehensive real-time streaming comparison platform for multiple AI models w
 - **Concurrent Streaming**: Fan-out pattern for parallel model calls
 - **Model Services**: Abstracted providers for OpenAI, Anthropic, and xAI
 - **MongoDB Integration**: Session, comparison history, and user data storage
-- **Authentication System**: JWT-based auth with email verification
+- **OAuth Authentication**: Google OAuth integration with Passport.js
 - **Analytics Engine**: Real-time usage tracking and statistics
 - **Error Handling**: Robust error handling and recovery
 - **CORS Configuration**: Secure cross-origin resource sharing
@@ -60,11 +60,11 @@ A comprehensive real-time streaming comparison platform for multiple AI models w
 - **Socket.IO** - WebSocket communication for real-time streaming
 - **MongoDB + Mongoose** - Database with schema validation
 - **JWT + Passport** - Authentication and authorization
+- **Google OAuth** - Google Sign-In integration
 - **TypeScript** - Full type safety
 - **OpenAI SDK** - GPT-4o and GPT-4o Mini models
 - **Anthropic SDK** - Claude 3.5 Sonnet models
 - **xAI API** - Grok models (mock implementation)
-- **Nodemailer** - Email verification (console logging in dev)
 
 ### Frontend
 - **Next.js 15** - React framework with App Router
@@ -82,7 +82,7 @@ A comprehensive real-time streaming comparison platform for multiple AI models w
 - Node.js 18+ 
 - MongoDB (local or cloud)
 - API keys for AI providers (OpenAI, Anthropic)
-- Email service (optional, uses console logging in development)
+- Google OAuth credentials (Google Cloud Console)
 
 ### Backend Setup
 
@@ -104,11 +104,20 @@ A comprehensive real-time streaming comparison platform for multiple AI models w
    Edit `.env` with your configuration:
    ```env
    PORT=3000
-   MONGODB_URI=mongodb://localhost:27017/multi-model-ai-playground
+   MONGODB_URI=mongodb://localhost:27017/ai-playground
    OPENAI_API_KEY=your_openai_api_key_here
    ANTHROPIC_API_KEY=your_anthropic_api_key_here
    XAI_API_KEY=your_xai_api_key_here
    JWT_SECRET=your-super-secret-jwt-key-here
+   
+   # Google OAuth Configuration
+   GOOGLE_CLIENT_ID=your-google-client-id
+   GOOGLE_CLIENT_SECRET=your-google-client-secret
+   GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
+   
+   # Frontend URL (for OAuth redirects)
+   FRONTEND_URL=http://localhost:3001
+   
    CORS_ORIGIN=http://localhost:3001
    ```
 
@@ -138,6 +147,7 @@ A comprehensive real-time streaming comparison platform for multiple AI models w
    ```env
    NEXT_PUBLIC_API_URL=http://localhost:3000
    NEXT_PUBLIC_WS_URL=http://localhost:3000
+   NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-client-id
    ```
 
 4. **Start the frontend**
@@ -183,9 +193,11 @@ multi-model-ai-playground/
 ## 🔌 API Endpoints
 
 ### Authentication
-- `POST /auth/send-code` - Send verification code to email
-- `POST /auth/verify-code` - Verify code and get JWT token
+- `GET /auth/google` - Initiate Google OAuth flow
+- `GET /auth/google/callback` - Google OAuth callback
+- `GET /auth/profile` - Get current user profile
 - `GET /auth/me` - Get current user info
+- `POST /auth/logout` - Logout user
 
 ### Chat History
 - `GET /chat-history` - Get user's chat history
@@ -218,7 +230,7 @@ multi-model-ai-playground/
 ## 🎯 Usage
 
 ### Getting Started
-1. **Login**: Enter your email and verify with the code sent to your email
+1. **Login**: Click "Continue with Google" to sign in with your Google account
 2. **Select Models**: Choose which AI models to compare (2-3 models required)
 3. **Enter Prompt**: Type your prompt in the text area
 4. **Submit**: Click "Start Comparison" to begin
@@ -243,9 +255,9 @@ multi-model-ai-playground/
 - **xAI Grok Beta**: Real-time information (mock implementation)
 
 ### Authentication
-- **Email Verification**: Simple email + code authentication
+- **Google OAuth**: Secure Google Sign-In authentication
 - **JWT Tokens**: Secure session management
-- **User Data**: Private, user-specific data storage
+- **User Data**: Private, user-specific data storage with avatar support
 
 ### Customization
 - Modify model configurations in `backend/src/models/`
@@ -282,9 +294,9 @@ npm run test:e2e
 ## 🚀 Deployment
 
 ### Backend Deployment
-1. Set production environment variables (MongoDB URI, API keys, JWT secret)
+1. Set production environment variables (MongoDB URI, API keys, JWT secret, Google OAuth credentials)
 2. Configure CORS origins for your frontend domain
-3. Set up email service for production (SMTP configuration)
+3. Set up Google OAuth credentials in Google Cloud Console
 4. Build the application: `npm run build`
 5. Start production server: `npm run start:prod`
 
@@ -296,7 +308,34 @@ npm run test:e2e
 
 ### Production Considerations
 - **Database**: Use MongoDB Atlas or a managed MongoDB service
-- **Authentication**: Configure proper JWT secrets and email services
+- **Authentication**: Configure proper JWT secrets and Google OAuth credentials
 - **CORS**: Set appropriate origins for your production domains
 - **API Keys**: Secure your AI provider API keys
+- **Google OAuth**: Set up OAuth consent screen and authorized redirect URIs
 - **Monitoring**: Set up logging and monitoring for production use
+
+## 🔧 Google OAuth Setup
+
+### 1. Google Cloud Console Setup
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Enable the Google+ API
+4. Go to "Credentials" and create OAuth 2.0 Client ID
+5. Set authorized redirect URIs:
+   - Development: `http://localhost:3000/auth/google/callback`
+   - Production: `https://yourdomain.com/auth/google/callback`
+
+### 2. Environment Variables
+Add your Google OAuth credentials to your `.env` file:
+```env
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
+FRONTEND_URL=http://localhost:3001
+```
+
+### 3. Frontend Configuration
+Add the Google Client ID to your frontend `.env.local`:
+```env
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-client-id
+```

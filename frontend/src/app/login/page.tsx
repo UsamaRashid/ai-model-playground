@@ -42,16 +42,17 @@ function LoginContent() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="flex justify-end mb-4">
-          <ThemeToggle />
+    <div className="min-h-screen bg-background">
+      {/* Dark mode toggle at the very top of the page */}
+      <div className="absolute top-4 right-4 z-10">
+        <ThemeToggle />
+      </div>
+      
+      {/* Main content centered */}
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <div className="w-full max-w-md">
+          <LoginForm onSuccess={() => router.push('/playground')} />
         </div>
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">Multi-Model AI Playground</h1>
-          <p className="text-muted-foreground mt-2">Sign in to start comparing AI models</p>
-        </div>
-        <LoginForm onSuccess={() => router.push('/playground')} />
       </div>
     </div>
   );

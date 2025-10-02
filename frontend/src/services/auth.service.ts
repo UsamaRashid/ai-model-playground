@@ -2,21 +2,6 @@ import { User } from '../stores/auth.store';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
-export interface SendCodeRequest {
-  email: string;
-  name?: string;
-}
-
-export interface VerifyCodeRequest {
-  email: string;
-  code: string;
-}
-
-export interface LoginRequest {
-  email: string;
-  code: string;
-}
-
 export interface AuthResponse {
   message: string;
   user?: User;
@@ -64,31 +49,16 @@ export class AuthService {
     return response.json();
   }
 
-  async sendVerificationCode(data: SendCodeRequest): Promise<AuthResponse> {
-    return this.request<AuthResponse>('/auth/send-code', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+  // Google OAuth methods
+  initiateGoogleAuth(): void {
+    window.location.href = `${API_BASE_URL}/auth/google`;
   }
 
-  async verifyCode(data: VerifyCodeRequest): Promise<AuthResponse> {
-    return this.request<AuthResponse>('/auth/verify-code', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-  }
-
-  async login(data: LoginRequest): Promise<AuthResponse> {
-    const response = await this.request<AuthResponse>('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-
-    if (response.access_token) {
-      this.setToken(response.access_token);
+  handleAuthCallback(token: string, provider: string): void {
+    if (token) {
+      this.setToken(token);
+      // The user data will be fetched from the profile endpoint
     }
-
-    return response;
   }
 
   async getProfile(): Promise<User> {

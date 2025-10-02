@@ -3,8 +3,12 @@ import { atom } from 'jotai';
 export interface User {
   id: string;
   email: string;
-  name?: string;
+  name: string;
+  avatar?: string;
+  provider: string;
   isEmailVerified: boolean;
+  lastLoginAt?: string;
+  createdAt?: string;
 }
 
 export interface AuthState {

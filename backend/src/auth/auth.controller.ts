@@ -47,4 +47,14 @@ export class AuthController {
       message: 'Logged out successfully',
     };
   }
+
+  @Get('config')
+  async getConfig() {
+    return {
+      googleClientId: process.env.GOOGLE_CLIENT_ID ? 'Set' : 'Missing',
+      googleClientSecret: process.env.GOOGLE_CLIENT_SECRET ? 'Set' : 'Missing',
+      googleCallbackUrl: process.env.GOOGLE_CALLBACK_URL || 'Missing',
+      frontendUrl: process.env.FRONTEND_URL || 'Missing',
+    };
+  }
 }

@@ -2,6 +2,8 @@
 
 A comprehensive real-time streaming comparison platform for multiple AI models with user authentication, chat history, and analytics. Compare responses from OpenAI, Anthropic, and xAI models side-by-side with live streaming updates.
 
+🌐 **Live Demo**: [https://ai-model-playground-dun.vercel.app/playground](https://ai-model-playground-dun.vercel.app/playground)
+
 ## 🚀 Features
 
 ### Core Functionality
@@ -158,6 +160,19 @@ A comprehensive real-time streaming comparison platform for multiple AI models w
 5. **Open your browser**
    Navigate to `http://localhost:3001` (or the port shown in your terminal)
 
+## 🌐 Live Application
+
+The application is deployed and available at:
+- **Production URL**: [https://ai-model-playground-dun.vercel.app/playground](https://ai-model-playground-dun.vercel.app/playground)
+- **Login Page**: [https://ai-model-playground-dun.vercel.app/login](https://ai-model-playground-dun.vercel.app/login)
+
+### Production Features
+- ✅ Google OAuth authentication
+- ✅ Real-time AI model comparison
+- ✅ Chat history and analytics
+- ✅ Dark mode support
+- ✅ Mobile responsive design
+
 ## 📁 Project Structure
 
 ```
@@ -306,6 +321,8 @@ npm run test:e2e
 3. Deploy to your preferred platform (Vercel, Netlify, etc.)
 4. Ensure CORS is configured to allow your frontend domain
 
+**Current Deployment**: The application is deployed on Vercel at [https://ai-model-playground-dun.vercel.app](https://ai-model-playground-dun.vercel.app)
+
 ### Production Considerations
 - **Database**: Use MongoDB Atlas or a managed MongoDB service
 - **Authentication**: Configure proper JWT secrets and Google OAuth credentials
@@ -323,15 +340,25 @@ npm run test:e2e
 4. Go to "Credentials" and create OAuth 2.0 Client ID
 5. Set authorized redirect URIs:
    - Development: `http://localhost:3000/auth/google/callback`
-   - Production: `https://yourdomain.com/auth/google/callback`
+   - Production: `https://ai-model-playground-dun.vercel.app/auth/google/callback`
 
 ### 2. Environment Variables
 Add your Google OAuth credentials to your `.env` file:
+
+**Development:**
 ```env
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
 FRONTEND_URL=http://localhost:3001
+```
+
+**Production:**
+```env
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GOOGLE_CALLBACK_URL=https://ai-model-playground-dun.vercel.app/auth/google/callback
+FRONTEND_URL=https://ai-model-playground-dun.vercel.app
 ```
 
 ### 3. Frontend Configuration

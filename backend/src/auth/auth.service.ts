@@ -22,7 +22,20 @@ export class AuthService {
   ) {}
 
   async validateOAuthUser(oauthUser: OAuthUser): Promise<UserDocument> {
-    const { email, googleId, provider } = oauthUser;
+    const { email, googleId, provider, name } = oauthUser;
+    
+    // Validate required fields
+    if (!email) {
+      throw new Error('Email is required for OAuth user');
+    }
+    if (!name) {
+      throw new Error('Name is required for OAuth user');
+    }
+    if (!googleId) {
+      throw new Error('Google ID is required for OAuth user');
+    }
+    
+    this.logger.log(`Processing OAuth user: ${email}, name: ${name}, googleId: ${googleId}`);
     
     // Try to find existing user by email first
     let user = await this.userModel.findOne({ email });
@@ -31,6 +44,8 @@ export class AuthService {
       // Update existing user with Google OAuth info
       user.googleId = googleId;
       user.provider = provider;
+      user.name = name; // Update name in case it changed
+      user.avatar = oauthUser.avatar;
       user.lastLoginAt = new Date();
       user.isEmailVerified = true;
       await user.save();
@@ -50,10 +65,14 @@ export class AuthService {
       googleId: oauthUser.googleId,
     });
 
-    const savedUser = await newUser.save();
-    this.logger.log(`New user ${email} created via ${provider}`);
-    
-    return savedUser;
+    try {
+      const savedUser = await newUser.save();
+      this.logger.log(`New user ${email} created via ${provider}`);
+      return savedUser;
+    } catch (error) {
+      this.logger.error(`Failed to create user ${email}:`, error);
+      throw error;
+    }
   }
 
   async validateUser(userId: string): Promise<UserDocument | null> {

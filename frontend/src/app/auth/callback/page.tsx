@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAtom } from 'jotai';
 import { authAtom } from '@/stores/auth.store';
@@ -8,7 +8,7 @@ import { authService } from '@/services/auth.service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, CheckCircle, XCircle } from 'lucide-react';
 
-export default function AuthCallbackPage() {
+function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [authState, setAuthState] = useAtom(authAtom);
@@ -108,5 +108,36 @@ export default function AuthCallbackPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-center">Authentication</CardTitle>
+          <CardDescription className="text-center">
+            Loading...
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col items-center space-y-4">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="text-sm text-muted-foreground">
+              Please wait while we complete your sign in...
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+export default function AuthCallbackPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <AuthCallbackContent />
+    </Suspense>
   );
 }

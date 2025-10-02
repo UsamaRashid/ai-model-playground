@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { EmailService } from './email.service';
+import { EmailController } from './email.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { User, UserSchema } from '../database/schemas/user.schema';
 
@@ -24,7 +25,7 @@ import { User, UserSchema } from '../database/schemas/user.schema';
       { name: User.name, schema: UserSchema },
     ]),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, EmailController],
   providers: [AuthService, EmailService, JwtStrategy],
   exports: [AuthService, JwtStrategy],
 })

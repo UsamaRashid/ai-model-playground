@@ -36,6 +36,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "mongoose": "^8.17.0",
+    "nodemailer": "^7.0.6",
     "openai": "^5.11.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
@@ -84,7 +85,9 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
-    "setupFilesAfterEnv": ["<rootDir>/../test/setup.ts"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/../test/setup.ts"
+    ],
     "testTimeout": 10000,
     "verbose": true
   }
